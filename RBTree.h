@@ -12,7 +12,10 @@ typedef struct rbtree {
 
 struct rbtree *rbtree_create (struct rbtree *node, struct rbtree *parent, int key, char *value);
 struct rbtree *rbtree_add (struct rbtree *tree, int key, char *value);
-struct rbtree *lookup_rbtree (struct rbtree *tree, int key);
-void print_tree(struct rbtree *tree);
+struct rbtree *rbtree_delete(struct rbtree *tree, int key);
+struct rbtree *rbtree_lookup (struct rbtree *tree, int key);
+struct rbtree *rbtree_min (struct rbtree *tree);
+struct rbtree *rbtree_max (struct rbtree *tree);
+void rbtree_print_tree(struct rbtree *tree);
 
 #endif

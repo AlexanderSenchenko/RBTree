@@ -49,7 +49,34 @@ struct rbtree *rbtree_add (struct rbtree *tree, int key, char *value)
 		return tree;
 }
 
-struct rbtree *lookup_rbtree (struct rbtree *tree, int key)
+struct rbtree *rbtree_delete(struct rbtree *tree, int key)
+{
+	struct rbtree *node, *parent, *left, *right;
+
+	node = rbtree_lookup(tree, key);
+
+	parent = node->parent;
+	left = node->left;
+	right = node->right;
+
+	if (left != NULL && left->key < parent->key) {
+		parent->left = left;
+		left->right = right;
+	} else if (right != NULL && right->key > parent->key) {
+		parent->right = right;
+		right->left = left;
+	} else {
+		if (key < parent->key) {
+			parent->left = NULL;
+		} else if (key > parent->key) {
+			parent->right = NULL;
+		}
+	}
+	
+	return tree;
+}
+
+struct rbtree *rbtree_lookup (struct rbtree *tree, int key)
 {
 	struct rbtree *node = tree;
 
@@ -66,16 +93,36 @@ struct rbtree *lookup_rbtree (struct rbtree *tree, int key)
 	return node;
 }
 
-void print_tree(struct rbtree *tree)
+struct rbtree *rbtree_min (struct rbtree *tree) {
+	struct rbtree *node = tree;
+
+	while (node->left != NULL) {
+		node = node->left;
+	}
+
+	return node;
+}
+
+struct rbtree *rbtree_max (struct rbtree *tree) {
+	struct rbtree *node = tree;
+
+	while (node->right != NULL) {
+		node = node->right;
+	}
+
+	return node;
+}
+
+void rbtree_print_tree(struct rbtree *tree)
 {
 	struct rbtree *node = tree;
 
 	if (node != NULL) {
 		printf("%s\t", node->value);
-		print_tree(node->left);
-		print_tree(node->right);
-		if (node->left == NULL && node->right == NULL) {
+		rbtree_print_tree(node->left);
+		rbtree_print_tree(node->right);
+		/*if (node->left == NULL && node->right == NULL) {
 			printf("\n\t");
-		}
+		}*/
 	}
 }
