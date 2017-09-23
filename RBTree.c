@@ -14,7 +14,6 @@ struct rbtree *rbtree_create_node (struct rbtree *node, struct rbtree *parent, i
 	node->left = NULL;
 	node->right = NULL;
 	node->parent = parent;
-
 	return node;
 }
 
@@ -51,15 +50,77 @@ struct rbtree *rbtree_add (struct rbtree *tree, int key, char *value)
 
 struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 {
-	struct rbtree *node, *parent, *left, *right;
+	struct rbtree *node, *parent, *left, *right, *node_look, *node_look_left, *node_look_right;
+	int flag = 1;
 
 	node = rbtree_lookup(tree, key);
+	//printf("%s\n", node->value);
 
-	parent = node->parent;
 	left = node->left;
 	right = node->right;
 
-	if (left != NULL && left->key < parent->key) {
+	while (flag == 1) {
+		flag = 0;
+		parent = node->parent;
+
+		if (left == NULL && right == NULL) {
+			if (key < parent->key) {
+				parent->left = NULL;
+			} else if (key > parent->key) {
+				parent->right = NULL;
+			}
+		} else if (left != NULL && right == NULL) {
+			if (key < parent->key) {
+				parent->left = left;
+			} else if (key > parent->key) {
+				parent->right = left;
+			}
+			left->parent = parent;
+		} else if (right != NULL && left == NULL) {
+			if (key < parent->key) {
+				parent->left = right;
+			} else if (key > parent->key) {
+				parent->right = right;
+			}
+			right->parent = parent;
+		} else if (left != NULL && right != NULL && right->left == NULL) {
+			if (key < parent->key) {
+				parent->left = right;
+			} else if (key > parent->key) {
+				parent->right = right;
+			}
+			right->left = left;
+			right->parent = parent;
+		} else if (left != NULL && right != NULL) {
+			node_look = right;
+			while (node_look->left == NULL) {
+				node_look = node_look->right;
+			}
+			node = node_look->left;
+
+			if (parent != NULL && key < parent->key) {
+				parent->left = node;
+			} else if (parent!= NULL && key > parent->key) {
+				parent->right = node;
+			} else if (parent == NULL) {
+				tree = node;
+				//printf("%s\n", node->value);
+			}
+
+			node_look_left = node_look->left->left;
+			node_look_right = node_look->left->right;
+
+			node_look->left->left = left;
+			node_look->left->right = right;
+
+			left = node_look_left;
+			right = node_look_right;
+			flag = 1;
+			//printf("test\n");
+		}
+	}
+
+	/*if (left != NULL && left->key < parent->key) {
 		parent->left = left;
 		left->right = right;
 	} else if (right != NULL && right->key > parent->key) {
@@ -71,8 +132,8 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 		} else if (key > parent->key) {
 			parent->right = NULL;
 		}
-	}
-	
+	}*/
+
 	return tree;
 }
 
@@ -93,36 +154,33 @@ struct rbtree *rbtree_lookup (struct rbtree *tree, int key)
 	return node;
 }
 
-struct rbtree *rbtree_min (struct rbtree *tree) {
+struct rbtree *rbtree_min (struct rbtree *tree)
+{
 	struct rbtree *node = tree;
-
 	while (node->left != NULL) {
 		node = node->left;
 	}
-
 	return node;
 }
 
-struct rbtree *rbtree_max (struct rbtree *tree) {
+struct rbtree *rbtree_max (struct rbtree *tree)
+{
 	struct rbtree *node = tree;
-
 	while (node->right != NULL) {
 		node = node->right;
 	}
-
 	return node;
 }
 
 void rbtree_print_tree(struct rbtree *tree)
 {
 	struct rbtree *node = tree;
-
 	if (node != NULL) {
 		printf("%s\t", node->value);
 		rbtree_print_tree(node->left);
 		rbtree_print_tree(node->right);
-		/*if (node->left == NULL && node->right == NULL) {
+		if (node->left == NULL && node->right == NULL) {
 			printf("\n\t");
-		}*/
+		}
 	}
 }

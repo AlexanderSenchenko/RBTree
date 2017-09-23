@@ -7,21 +7,23 @@ int main()
 
 	tree = rbtree_add(tree, 10, "10");
 	tree = rbtree_add(tree, 5, "5");
-	tree = rbtree_add(tree, 3, "3");
-	tree = rbtree_add(tree, 11, "11");
+	tree = rbtree_add(tree, 4, "4");
 	tree = rbtree_add(tree, 12, "12");
+	tree = rbtree_add(tree, 11, "11");
 	tree = rbtree_add(tree, 6, "6");
 	tree = rbtree_add(tree, 8, "8");
 	tree = rbtree_add(tree, 9, "9");
+	tree = rbtree_add(tree, 7, "7");
+	tree = rbtree_add(tree, 2, "2");
+	tree = rbtree_add(tree, 3, "3");
+	tree = rbtree_add(tree, 13, "13");
 
 	rbtree_print_tree(tree);
 	printf("\n");
 
-	tree = rbtree_delete(tree, 5);
-
-	node = rbtree_lookup(tree, 10);
+	node = rbtree_lookup(tree, 11);
 	if (node != NULL) {
-		printf("%s %p %p %p %p\n", node->value, node, node->right, node->left, node->parent);
+		printf("%s %p %p %p %p\n", node->value, node, node->left, node->right, node->parent);
 	} else {
 		printf("Error 404\n");
 	}
@@ -31,6 +33,8 @@ int main()
 
 	node = rbtree_max(tree);
 	printf("Max: %s %p %p %p %p\n", node->value, node, node->right, node->left, node->parent);
+
+	tree = rbtree_delete(tree, 5);
 
 	rbtree_print_tree(tree);
 	printf("\n");
