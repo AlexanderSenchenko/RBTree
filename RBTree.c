@@ -64,30 +64,56 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 		parent = node->parent;
 
 		if (left == NULL && right == NULL) {
-			if (key < parent->key) {
+			/*if (key < parent->key) {
 				parent->left = NULL;
 			} else if (key > parent->key) {
 				parent->right = NULL;
+			}*/
+			if (parent != NULL && key < parent->key) {
+				parent->left = NULL;
+			} else if (parent!= NULL && key > parent->key) {
+				parent->right = NULL;
+			} else if (parent == NULL) {
+				tree = NULL;
+				//printf("%s\n", node->value);
 			}
 		} else if (left != NULL && right == NULL) {
-			if (key < parent->key) {
+			/*if (key < parent->key) {
 				parent->left = left;
 			} else if (key > parent->key) {
 				parent->right = left;
+			}*/
+			if (parent != NULL && key < parent->key) {
+				parent->left = left;
+			} else if (parent!= NULL && key > parent->key) {
+				parent->right = left;
+			} else if (parent == NULL) {
+				tree = left;
+				//printf("%s\n", node->value);
 			}
 			left->parent = parent;
 		} else if (right != NULL && left == NULL) {
-			if (key < parent->key) {
+			/*if (key < parent->key) {
 				parent->left = right;
 			} else if (key > parent->key) {
 				parent->right = right;
+			}*/
+			if (parent != NULL && key < parent->key) {
+				parent->left = right;
+			} else if (parent!= NULL && key > parent->key) {
+				parent->right = right;
+			} else if (parent == NULL) {
+				tree = right;
+				//printf("%s\n", node->value);
 			}
 			right->parent = parent;
 		} else if (left != NULL && right != NULL && right->left == NULL) {
-			if (key < parent->key) {
+			if (parent != NULL && key < parent->key) {
 				parent->left = right;
-			} else if (key > parent->key) {
+			} else if (parent!= NULL && key > parent->key) {
 				parent->right = right;
+			} else if (parent == NULL) {
+				tree = right;
 			}
 			right->left = left;
 			right->parent = parent;

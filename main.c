@@ -34,7 +34,7 @@ int main()
 	node = rbtree_max(tree);
 	printf("Max: %s %p %p %p %p\n", node->value, node, node->right, node->left, node->parent);
 
-	tree = rbtree_delete(tree, 5);
+	tree = rbtree_delete(tree, 10);
 
 	rbtree_print_tree(tree);
 	printf("\n");
