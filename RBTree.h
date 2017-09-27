@@ -17,5 +17,8 @@ struct rbtree *rbtree_lookup (struct rbtree *tree, int key);
 struct rbtree *rbtree_min (struct rbtree *tree);
 struct rbtree *rbtree_max (struct rbtree *tree);
 void rbtree_print_tree(struct rbtree *tree);
+struct rbtree *rbtree_left_rotate(struct rbtree *node);
+struct rbtree *rbtree_right_rotate(struct rbtree *node);
+struct rbtree *rbtree_fixup(struct rbtree *tree, struct rbtree *node);
 
 #endif
