@@ -101,6 +101,7 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 				tree = right;
 			}
 			right->left = left;
+			left->parent = right;
 			right->parent = parent;
 		} else if (left != NULL && right != NULL) {
 			node_look = right;
@@ -130,8 +131,8 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 	}
 
 	tree = rbtree_fixup(tree, node);
-	rbtree_print_tree(tree);
-	printf("\n");
+	//rbtree_print_tree(tree);
+	//printf("\n");
 
 	return tree;
 }
@@ -175,12 +176,9 @@ void rbtree_print_tree(struct rbtree *tree)
 {
 	struct rbtree *node = tree;
 	if (node != NULL) {
-		printf("%s\t", node->value);
+		printf("%s\t%p\t%p\t%p\t%p\t%d\n", node->value, node, node->parent, node->left, node->right, node->color);
 		rbtree_print_tree(node->left);
 		rbtree_print_tree(node->right);
-		if (node->left == NULL && node->right == NULL) {
-			printf("\n\t");
-		}
 	}
 }
 
@@ -189,11 +187,11 @@ struct rbtree *rbtree_fixup(struct rbtree *tree, struct rbtree *node)
 	struct rbtree *fix;
 
 	while (node->parent != NULL && node->parent->color == 0) {
-		if (node->parent == node->parent->parent->left) {//левое поддерево
+		if (node->parent == node->parent->parent->left) {
 
 			struct rbtree *uncle = node->parent->parent->right;
 
-			if (uncle != NULL && uncle->color == 0) {//дядя красный -> 1 случай
+			if (uncle != NULL && uncle->color == 0) {
 
 				node->parent->color = 1;
 				uncle->color = 1;
@@ -225,7 +223,7 @@ struct rbtree *rbtree_fixup(struct rbtree *tree, struct rbtree *node)
 		} else {
 			struct rbtree *uncle = node->parent->parent->left;
 
-			if (uncle != NULL && uncle->color == 0) {//дядя красный, узел справа - 4 случай
+			if (uncle != NULL && uncle->color == 0) {
 				node->parent->color = 1;
 				node->parent->parent->color = 0;
 				uncle->color = 1;
