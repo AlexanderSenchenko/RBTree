@@ -28,9 +28,9 @@ int main()
 	printf("Min: %s %p %p %p %p\n", node->value, node, node->right, node->left, node->parent);
 
 	node = rbtree_max(tree);
-	printf("Max: %s %p %p %p %p\n", node->value, node, node->right, node->left, node->parent);
+	printf("Max: %s %p %p %p %p\n\n", node->value, node, node->right, node->left, node->parent);
 
-	tree = rbtree_delete(tree, 6);
+	tree = rbtree_delete(tree, 11);
 	rbtree_print_tree(tree);
 	printf("\n");
 
