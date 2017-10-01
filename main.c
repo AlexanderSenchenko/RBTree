@@ -3,7 +3,7 @@
 
 int main()
 {
-	struct rbtree *tree = NULL, *node = NULL;
+	struct rbtree *tree = NULL;//, *node = NULL;
 
 	tree = rbtree_add(tree, 10, "10");
 	tree = rbtree_add(tree, 5, "5");
@@ -34,7 +34,7 @@ int main()
 	*/
 
 	printf("Delete:\n");
-	tree = rbtree_delete(tree, 12);
+	tree = rbtree_delete(tree, 10);
 	rbtree_print_tree(tree);
 	printf("\n");
 

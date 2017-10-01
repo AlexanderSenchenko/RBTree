@@ -115,13 +115,14 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 	node_color = node->color;
 
 	if (node->left == NULL && node->right == NULL) {
-		if (node->parent != NULL && key < node->parent->key) {
+		/*if (node->parent != NULL && key < node->parent->key) {
 			node->parent->left = NULL;
 		} else if (node->parent!= NULL && key > node->parent->key) {
 			node->parent->right = NULL;
 		} else if (node->parent == NULL) {
 			tree = NULL;
-		}
+		}*/
+		tree = rbtree_transplant(tree, node, NULL);
 	} else if (node->left != NULL && node->right == NULL) {
 		x = node->left;
 		tree = rbtree_transplant(tree, node, node->left);
@@ -147,45 +148,50 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 		tree = rbtree_transplant(tree, node_old, node);
 		node->left = node_old->left;
 		node->left->parent = node;
-
-		/*node->left = node_old->left;
-		node_old->left->parent = node;
-		if (node->parent != node_old) {
-			node->parent->left = node->right;
-			node->right = node_old->right;
-			node->right->parent = node;
-		}
-
-		if (node_old->parent != NULL && key < node_old->parent->key) {
-			node->parent = node_old->parent;
-			node_old->parent->left = node;
-		} else if (node_old->parent!= NULL && key > node_old->parent->key) {
-			node->parent = node_old->parent;
-			node_old->parent->right = node;
-		} else if (node_old->parent == NULL) {
-			tree = node;
-		}*/
 		node->color = node_old->color;
 	}
-	//if (node_color = 1) {
-	//	tree = rbtree_delete_fixup(tree, x);
-	//}
+	if (node_color == 1) {
+		tree = rbtree_delete_fixup(tree, x);
+	}
 	return tree;
 }
 
-/*struct rbtree *rbtree_delete_fixup(struct rbtree *tree, struct rbtree *node)
+struct rbtree *rbtree_delete_fixup(struct rbtree *tree, struct rbtree *node)
 {
 	struct rbtree *w;
-	while (node != tree && node_color == 1) {
-		if (node = node->parent->left) {
-			w = 
+	while (node != tree && node->color == 1) {
+		if (node == node->parent->left) {
+			w = node->parent->right;
+			if (w->color == 0) {
+				w->color = 1;
+				node->parent->color = 0;
+				tree = rbtree_right_rotate(node->parent);
+				w = node->parent->right;
+			}
+			if (w->left->color == 1) {
+				w->right->color = 1;
+				w->color = 0;
+				node = node->parent;
+			} else {
+				if (w->right->color == 1) {
+					w->left->color = 1;
+					w->color = 0;
+					tree = rbtree_right_rotate(w);
+					w = node->parent->right;
+				}
+				w->color = node->parent->color;
+				node->parent->color = 1;
+				w->right->color = 1;
+				tree = rbtree_right_rotate(node->parent);
+				node = tree;
+			} //else
 
 		}
 		
 	}
 	node->color = 0;
 	return tree;
-}*/
+}
 
 struct rbtree *rbtree_transplant(struct rbtree *tree, struct rbtree *z, struct rbtree *u)
 {
