@@ -115,6 +115,10 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 	int node_color;
 
 	node = rbtree_lookup(tree, key);
+	if (node == NULL) {
+		printf("Error, not element\n");
+		return tree;
+	}
 	node_color = node->color;
 
 	if (node->left != NULL && node->right == NullNode) {
@@ -127,7 +131,6 @@ struct rbtree *rbtree_delete(struct rbtree *tree, int key)
 		struct rbtree *node_old = node;
 		node = rbtree_min(node->right);
 		node_color = node->color;
-
 		node_trans = node->right;
 
 		if (node->parent == node_old) {
@@ -167,7 +170,7 @@ struct rbtree *rbtree_delete_fixup(struct rbtree *tree, struct rbtree *node)
 				node_br->color = 0;
 				node = node->parent;
 			} else {
-				if (node_br->right == NULL || node_br->right->color == 1) {
+				if (node_br->right->color == 1) {
 					node_br->left->color = 1;
 					node_br->color = 0;
 					test = rbtree_right_rotate(node_br);
@@ -195,20 +198,6 @@ struct rbtree *rbtree_delete_fixup(struct rbtree *tree, struct rbtree *node)
 					tree = test;
 				}
 				node_br = node->parent->left;
-			}
-
-			if (node_br == NULL) {
-				node_br = rbtree_create_node(node_br, node->parent, 0, "0");
-				node_br->color = 1;
-				node_br->parent->right = node_br;
-			}
-			if (node_br->left == NULL) {
-				node_br->left = rbtree_create_node(node_br->left, node_br, 0, "0");
-				node_br->left->color = 1;
-			}
-			if (node_br->right == NULL) {
-				node_br->right = rbtree_create_node(node_br->right, node_br, 0, "0");
-				node_br->right->color = 1;
 			}
 
 			if (node_br->left->color == 1 && node_br->right->color == 1) {
@@ -348,7 +337,7 @@ struct rbtree *rbtree_right_rotate(struct rbtree *node)
 void rbtree_print_tree(struct rbtree *tree)
 {
 	struct rbtree *node = tree;
-	if (node != NullNode &&  node != NULL) {
+	if (node != NullNode && node != NULL) {
 		printf("%s\t%p\t", node->value, node);
 		printf("%p\t", node->parent);
 		if (node->parent == NULL) {
