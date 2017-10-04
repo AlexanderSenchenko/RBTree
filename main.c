@@ -15,13 +15,12 @@ int main(int argc, char *argv[])
 	tree = rbtree_add(tree, 6, "6");
 	tree = rbtree_add(tree, 8, "8");
 	tree = rbtree_add(tree, 9, "9");
-	//tree = rbtree_add(tree, 13, "13");
-	//tree = rbtree_add(tree, 50, "50");
 
 	printf("Delete:\n");
 	tree = rbtree_delete(tree, key_del);
 	rbtree_print_tree(tree);
 	printf("\n");
+	printf("key\tnode\t\tparent\t\tleft\t\treght\t\tcolor\n");
 
 	return 0;
 }

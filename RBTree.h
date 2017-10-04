@@ -10,6 +10,9 @@ typedef struct rbtree {
 	struct rbtree *parent;
 } rbtree;
 
+struct rbtree EmptyNode;
+struct rbtree *NullNode;
+
 struct rbtree *rbtree_create (struct rbtree *node, struct rbtree *parent, int key, char *value);
 struct rbtree *rbtree_add (struct rbtree *tree, int key, char *value);
 struct rbtree *rbtree_delete(struct rbtree *tree, int key);
